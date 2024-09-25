@@ -1,0 +1,342 @@
+{
+	"minion": [
+		{
+			"minion_pro3_1": [
+				{
+					"name": "박소영1",
+					"attack": 3,
+					"health": 3,
+					"cost": 2,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_2": [
+				{
+					"name": "박소영2",
+					"attack": 1,
+					"health": 3,
+					"cost": 2,
+					"description": "임시작성",
+					"tag": "고양이",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_3": [
+				{
+					"name": "박소영3",
+					"attack": 1,
+					"health": 3,
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "희생",
+					"sacrifice": "2",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_4": [
+				{
+					"name": "박소영4",
+					"attack": 0,
+					"health": 8,
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "점프",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_5": [
+				{
+					"name": "박소영5",
+					"attack": 12,
+					"health": 3,
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "날개",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_6": [
+				{
+					"name": "박소영6",
+					"attack": 1,
+					"health": 5,
+					"cost": 2,
+					"description": "임시작성",
+					"tag": "귀환",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_7": [
+				{
+					"name": "박소영7",
+					"attack": 2,
+					"health": 2,
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "다중타격",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_8": [
+				{
+					"name": "박소영8",
+					"attack": 0,
+					"health": 10,
+					"cost": 3,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_9": [
+				{
+					"name": "박소영9",
+					"attack": 7,
+					"health": 4,
+					"cost": 4,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_10": [
+				{
+					"name": "박소영10",
+					"attack": 3,
+					"health": 5,
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "가시",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_11": [
+				{
+					"name": "박소영11",
+					"attack": 2,
+					"health": 2,
+					"cost": 1,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_12": [
+				{
+					"name": "박소영12",
+					"attack": 3,
+					"health": 3,
+					"cost": 2,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_13": [
+				{
+					"name": "박소영13",
+					"attack": 1,
+					"health": 4,
+					"cost": 2,
+					"description": "임시작성",
+					"tag": "리더",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_14": [
+				{
+					"name": "박소영14",
+					"attack": 1,
+					"health": 2,
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "증식",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"minion_pro3_15": [
+				{
+					"name": "박소영15",
+					"attack": 3,
+					"health": 4,
+					"cost": 3,
+					"description": "임시작성",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"skill": [
+		{
+			"skill_pro3_1": [
+				{
+					"name": "박소영스킬1",
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_2": [
+				{
+					"name": "박소영스킬2",
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_3": [
+				{
+					"name": "박소영스킬3",
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_4": [
+				{
+					"name": "박소영스킬4",
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_5": [
+				{
+					"name": "박소영스킬5",
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_6": [
+				{
+					"name": "박소영스킬6",
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_7": [
+				{
+					"name": "박소영스킬7",
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_8": [
+				{
+					"name": "박소영스킬8",
+					"cost": 3,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro3_9": [
+				{
+					"name": "박소영스킬9",
+					"cost": 4,
+					"description": "임시작성",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"power": [
+		{
+			"power_pro3_1": [
+				{
+					"name": "박소영파워1",
+					"cost": 10,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro3_2": [
+				{
+					"name": "박소영파워2",
+					"cost": 6,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro3_3": [
+				{
+					"name": "박소영파워3",
+					"cost": 10,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+                }
+            ],
+            "power_pro3_4": [
+				{
+					"name": "박소영파워4",
+					"cost": 10,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+                }
+            ],
+            "power_pro3_5": [
+				{
+					"name": "박소영파워5",
+					"cost": 10,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+                }
+            ],
+            "power_pro3_6": [
+				{
+					"name": "박소영파워6",
+					"cost": 10,
+					"description": "임시작성",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+                }
+            ]
+        }
+    ]
+}
+
+
+

@@ -1,0 +1,191 @@
+{
+	"minion": [
+		{
+			"baby_sm": [
+				{
+					"name": "아기 수뭉이",
+					"attack": 1,
+					"health": 1,
+					"cost": 2,
+					"description": "아주 귀엽다",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+				},
+				{
+					"name": "중2병 수뭉이",
+					"attack": 2,
+					"health": 2,
+					"cost": 2,
+					"description": "벌써 중2병이 와버렸어...",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+				},
+				{
+					"name": "상명대생 수뭉이",
+					"attack": 3,
+					"health": 3,
+					"cost": 2,
+					"description": "중2병을 극복하고 상명대에 가다니. 정말 장해!",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+				},
+				{
+					"name": "취준생 수뭉이",
+					"attack": 4,
+					"health": 4,
+					"cost": 2,
+					"description": "수뭉아 인생은 길어. 괜찮아!",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+				},
+				{
+					"name": "결혼한 수뭉이",
+					"attack": 5,
+					"health": 5,
+					"cost": 2,
+					"description": "우리 수뭉이. 잘 부탁드려요, 아 눈의 이건 그저 땀인걸...",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+				},
+				{
+					"name": "가장 수뭉이",
+					"attack": 6,
+					"health": 6,
+					"cost": 2,
+					"description": "손주가 아주 귀여운걸, 아기 수뭉이를 닮았어",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				},
+				{
+					"name": "노인 수뭉이",
+					"attack": 7,
+					"health": 7,
+					"cost": 2,
+					"description": "수뭉아 지금까지 수고했어",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"slime_sm": [
+				{
+					"name": "슬라임 수뭉이",
+					"attack": 2,
+					"health": 2,
+					"cost": 3,
+					"description": "슬라임 형태의 수뭉이다...",
+					"tag": "증식",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				},
+				{
+					"name": "분해된 슬라임 수뭉이",
+					"attack": 0,
+					"health": 2,
+					"cost": 0,
+					"description": "분해되었다",
+					"tag": "증식",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"assassin_sm": [
+				{
+					"name": "어쌔신 수뭉이",
+					"attack": 2,
+					"health": 3,
+					"cost": 2,
+					"description": "어둠의 실력자가 되고싶어.",
+					"tag": "독",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"uroboros_sm": [
+				{
+					"name": "우로보로스 수뭉",
+					"attack": 1,
+					"health": 1,
+					"cost": 3,
+					"description": "수뭉이가 죽지않아 !",
+					"tag": "불사",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"faerie_sm": [
+				{
+					"name": "전투요정수뭉",
+					"attack": 8,
+					"health": 2,
+					"cost": 3,
+					"description": "교수님, 거기는 제 잔상.입니다만 ?",
+					"tag": "날개",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"selfboom_sm": [
+				{
+					"name": "폭탄수뭉",
+					"attack": 1,
+					"health": 1,
+					"cost": 3,
+					"description": "폭탄나가신다 ! ! !",
+					"tag": "덫",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"skill": [
+		{
+			"pop_enemy": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"return_my": [
+				{
+					"name": "출석만 찍고 도망치는것이 국룰",
+					"cost": 3,
+					"description": "필드로 내보낸 소환물을 다시 손으로 가져온다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"power": [
+		{
+			"Mantra": [
+				{
+					"name": "오 나의 수뭉신",
+					"cost": 10,
+					"description": "매턴 주어지는 코스트가 1씩 증가한다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"Bless": [
+				{
+					"name": "수뭉이엘 드롭아웃",
+					"cost": 6,
+					"description": "카드가 소멸 할 때 마다, 코스트를 1씩 받는다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			]
+		}
+	]
+}

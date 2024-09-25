@@ -1,0 +1,359 @@
+{
+	"minion": [
+		{
+			"grow_gts": [
+				{
+					"name": "교수 길태숙",
+					"attack": 3,
+					"health": 3,
+					"cost": 2,
+					"description": "흥미곡선이 뭔지 아세요?",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				},
+				{
+					"name": "흑화한 길태숙",
+					"attack": 5,
+					"health": 5,
+					"cost": 2,
+					"description": "제가 중요하다고 말했을 텐데?",
+					"tag": "성장",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"cat_gts": [
+				{
+					"name": "길태숙 교수님이 기르는 고양이",
+					"attack": 1,
+					"health": 3,
+					"cost": 2,
+					"description": "고양이는 목숨이 9개냥",
+					"tag": "고양이",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"glasses_gts": [
+				{
+					"name": "길태숙의 안경",
+					"attack": 1,
+					"health": 3,
+					"cost": 3,
+					"description": "나의 안경을 부러뜨리다니...",
+					"tag": "희생",
+					"sacrifice": "2",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"gamestudies": [
+				{
+					"name": "눈물의 게임학개론",
+					"attack": 0,
+					"health": 8,
+					"cost": 3,
+					"description": "게임학개론 재수강이라고...",
+					"tag": "점프",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"gamecd": [
+				{
+					"name": "겜컨디 그만해...그만",
+					"attack": 12,
+					"health": 3,
+					"cost": 4,
+					"description": "겜컨디도 재수강 확정이야 으으...",
+					"tag": "날개",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"comeback_mgr": [
+				{
+					"name": "전설의 게임학개론 7점, 민경록",
+					"attack": 1,
+					"health": 5,
+					"cost": 2,
+					"description": "총알받이로 쓰면 최고 ! 길태숙 교수님이 좋아합니다",
+					"tag": "귀환",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"attacall_shy": [
+				{
+					"name": "전체공격 신호연",
+					"attack": 2,
+					"health": 2,
+					"cost": 3,
+					"description": "일반공격이 전체공격에 2회공격인 신호연은 좋아하세요?",
+					"tag": "다중타격",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"comeback_mg": [
+				{
+					"name": "오정훈이 빌려준 게임학개론",
+					"attack": 0,
+					"health": 10,
+					"cost": 3,
+					"description": "라면받침대로 쓰고 있습니다. 두꺼워서 좋아요",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"edu_kuc": [
+				{
+					"name": "교육학과김유찬",
+					"attack": 7,
+					"health": 4,
+					"cost": 4,
+					"description": "게임학개론 들어야겠지? 그림 그려야겠지? 타과도 예외는 없다.",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"gamemaker_splinter": [
+				{
+					"name": "민경록보다 나은 9점",
+					"attack": 3,
+					"health": 5,
+					"cost": 3,
+					"description": "저는 그래도 9점이거든요",
+					"tag": "가시",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"im_shy": [
+				{
+					"name": "기획자의 절규",
+					"attack": 2,
+					"health": 2,
+					"cost": 1,
+					"description": "제가 카드 100장을 만들겠다고... 무슨수로",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"good_game": [
+				{
+					"name": "길태숙 교수님 보고계십니까",
+					"attack": 3,
+					"health": 3,
+					"cost": 2,
+					"description": "겜학 9점이어도 기획, 가능합니다.",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"leader_game": [
+				{
+					"name": "자 모두 나를 따르도록",
+					"attack": 1,
+					"health": 4,
+					"cost": 2,
+					"description": "굴러라, 너희가 선택한 기획이다",
+					"tag": "리더",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"pain_shy": [
+				{
+					"name": "신호연",
+					"attack": 1,
+					"health": 2,
+					"cost": 3,
+					"description": "살려주세요 흑흑",
+					"tag": "증식",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				},
+				{
+					"name": "누군가의 재촉",
+					"attack": 2,
+					"health": 1,
+					"cost": 0,
+					"description": "신호연씨 빨리 만들어오시라고요",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			],
+			"ppt_kdh": [
+				{
+					"name": "ppt예상 분량 20장",
+					"attack": 3,
+					"health": 4,
+					"cost": 3,
+					"description": "너희만 믿고있다고ww",
+					"image": "src/Game/assets/cards/minion_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"skill": [
+		{
+			"skill_pro1_1": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_2": [
+				{
+					"name": "출석만 찍고 도망치는것이 국룰",
+					"cost": 3,
+					"description": "필드로 내보낸 소환물을 다시 손으로 가져온다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_3": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_4": [
+				{
+					"name": "출석만 찍고 도망치는것이 국룰",
+					"cost": 3,
+					"description": "필드로 내보낸 소환물을 다시 손으로 가져온다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_5": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_6": [
+				{
+					"name": "출석만 찍고 도망치는것이 국룰",
+					"cost": 3,
+					"description": "필드로 내보낸 소환물을 다시 손으로 가져온다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_7": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_8": [
+				{
+					"name": "출석만 찍고 도망치는것이 국룰",
+					"cost": 3,
+					"description": "필드로 내보낸 소환물을 다시 손으로 가져온다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			],
+			"skill_pro1_9": [
+				{
+					"name": "교수님 종강 언제해요 ?",
+					"cost": 4,
+					"description": "적 필드의 소환물을 하나 삭제한다.",
+					"tag": "기회",
+					"image": "src/Game/assets/cards/skill_cardEX.png"
+
+				}
+			]
+		}
+	],
+	"power": [
+		{
+			"power_pro1_1": [
+				{
+					"name": "오 나의 수뭉신",
+					"cost": 10,
+					"description": "매턴 주어지는 코스트가 1씩 증가한다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro1_2": [
+				{
+					"name": "수뭉이엘 드롭아웃",
+					"cost": 6,
+					"description": "카드가 소멸 할 때 마다, 코스트를 1씩 받는다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro1_3": [
+				{
+					"name": "오 나의 수뭉신",
+					"cost": 10,
+					"description": "매턴 주어지는 코스트가 1씩 증가한다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro1_4": [
+				{
+					"name": "수뭉이엘 드롭아웃",
+					"cost": 6,
+					"description": "카드가 소멸 할 때 마다, 코스트를 1씩 받는다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro1_5": [
+				{
+					"name": "오 나의 수뭉신",
+					"cost": 10,
+					"description": "매턴 주어지는 코스트가 1씩 증가한다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			],
+			"power_pro1_6": [
+				{
+					"name": "수뭉이엘 드롭아웃",
+					"cost": 6,
+					"description": "카드가 소멸 할 때 마다, 코스트를 1씩 받는다",
+					"tag": "소멸",
+					"image": "src/Game/assets/cards/power_cardEX.png"
+
+				}
+			]
+		}
+	]
+}
