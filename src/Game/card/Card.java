@@ -1,6 +1,8 @@
 package Game.card;
+import java.io.Serializable;
 
-public class Card {
+
+public class Card implements Serializable {
     private String name;
     private int attack;
     private int health;
