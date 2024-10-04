@@ -17,22 +17,31 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class view_fight extends JPanel {
 	
     private MainFrame mainFrame;
+    private boolean isDragging = false; // 드래그 앤 드롭 상태 플래그 추가
     private card_loder loader = new card_loder();
     private static final long serialVersionUID = 1L;
     private JPanel cardPanel;
     private JPanel battlefieldPanel;
     private List<Card> playerCards = new ArrayList<>();
     private List<Card> allCards = new ArrayList<>();
-    private JButton endTurnButton;
     private Image backgroundImage;
+    private JPanel[] fieldSlots = new JPanel[5]; // 5개의 슬롯 패널
+    private Card[] fieldCards = new Card[5]; // 각 슬롯에 배치된 카드
+
 
     public view_fight(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(null);
+        setPreferredSize(new Dimension(1300, 800));
+        setSize(new Dimension(1300, 800)); // 크기를 명시적으로 지정
+
+
 
         // 배경 이미지 로드
         backgroundImage = new ImageIcon(getClass().getResource("/resources/background/fightEX.png")).getImage();
@@ -95,45 +104,140 @@ public class view_fight extends JPanel {
     private void initUI() {
         System.out.println("UI 초기화 중");
         
-        setLayout(new BorderLayout());
+        setLayout(null); // 절대 위치 사용
 
-        // 배틀필드 패널 설정 (센터에 배치)
-        battlefieldPanel = new JPanel(null); // null 레이아웃 사용
+     // 배틀필드 패널 설정
+        battlefieldPanel = new JPanel(new GridLayout(1, 5)); // 1행 5열의 그리드 레이아웃
         battlefieldPanel.setOpaque(false);
-        add(battlefieldPanel, BorderLayout.CENTER);
+        battlefieldPanel.setBounds(50, 300, 770, 230); // 위치와 크기 설정
+        add(battlefieldPanel);
+                
+        for (int i = 0; i < 5; i++) {
+            JPanel slotPanel = new JPanel(null); // 슬롯마다 null 레이아웃 사용
+            slotPanel.setOpaque(false);
+            slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE)); // 슬롯 구분을 위한 테두리
+            battlefieldPanel.add(slotPanel);
+            fieldSlots[i] = slotPanel;
+            
+            final int slotIndex = i;
+            slotPanel.setDropTarget(new DropTarget() {
+                @Override
+                public synchronized void drop(DropTargetDropEvent dtde) {
+                    if (isDragging) {
+                        // 드래그 앤 드롭 중복 방지
+                        isDragging = false;
+                    }
+                    try {
+                        // 슬롯에 이미 카드가 있으면 드롭 불가
+                        if (fieldCards[slotIndex] != null) {
+                            dtde.rejectDrop();
+                            return;
+                        }
+
+                        dtde.acceptDrop(DnDConstants.ACTION_MOVE);
+                        Transferable transferable = dtde.getTransferable();
+                        CardUI droppedCardUI = (CardUI) transferable.getTransferData(new DataFlavor(CardUI.class, "CardUI"));
+
+                        // 손패에서 해당 카드 제거
+                        Card droppedCard = droppedCardUI.getCard();
+                        boolean removed = playerCards.remove(droppedCard);
+                        if (removed) {
+                            System.out.println("카드손패에서제거성공: " + droppedCard.getName());
+                            displayPlayerCards();
+                        } else {
+                            System.out.println("카드를 손패에서 찾을 수 없습니다.");
+                        }
+
+                        // 슬롯에 카드 추가
+                        slotPanel.add(droppedCardUI);
+                        droppedCardUI.setBounds(0, 0, droppedCardUI.getPreferredSize().width, droppedCardUI.getPreferredSize().height);
+                        droppedCardUI.resetFont();
+
+                        // 슬롯에 배치된 카드 기록
+                        fieldCards[slotIndex] = droppedCard;
+
+                        // 패널들 다시 그리기
+                        slotPanel.revalidate();
+                        slotPanel.repaint();
+
+                    } catch (UnsupportedFlavorException | IOException ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        // 드래그 앤 드롭 상태 해제
+                        isDragging = false;
+                    }
+                }
+            });
+        }
+
+        
+        JButton endTurnButton = new JButton("턴 종료");
+        endTurnButton.setBounds(1000, 461, 100, 30);
+        endTurnButton.setLayout(null); // 절대 위치 사용
+        endTurnButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		drawCard();
+        	}
+        });
+        add(endTurnButton);
+        
+
 
         // 카드 패널 설정 (하단에 배치)
         cardPanel = new JPanel();
-        cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         cardPanel.setOpaque(false);
-        add(cardPanel, BorderLayout.SOUTH);
+        cardPanel.setBounds(0, 550, 1000, 500); // 위치와 크기 설정
+        add(cardPanel);
+        
+        
+                
 
         // 손패 카드 보여주기
         displayPlayerCards();
         System.out.println("카드보여주기완료");
 
-        // 턴 종료 버튼 추가 (상단에 배치)
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        topPanel.setOpaque(false);
-        endTurnButton = new JButton("턴 종료");
-        endTurnButton.addActionListener(e -> drawCard());
-        add(endTurnButton, BorderLayout.NORTH);
-
         System.out.println("UI 불러오기 완료");
+        revalidate();
+        repaint();
+
     }
 
     private void displayPlayerCards() {
         cardPanel.removeAll();
-        for (Card card : playerCards) {
-            CardUI cardUI = new CardUI(card);
-            cardUI.setPreferredSize(new Dimension(100, 150));
+        cardPanel.setLayout(null); // 패널 레이아웃을 null로 설정해서 절대 위치를 사용
+
+        int cardWidth = 150; // 카드의 너비 (픽셀)
+        int cardHeight = 200; // 카드의 높이 (픽셀)
+        int maxVisibleWidth = cardPanel.getWidth(); // 카드 패널의 너비
+        int cardCount = playerCards.size(); // 손패의 카드 수
+
+        int spacing;
+
+        if (cardCount * cardWidth <= maxVisibleWidth) {
+            spacing = (maxVisibleWidth - cardWidth) / Math.max(1, cardCount - 1);
+            spacing = Math.min(spacing, cardWidth);
+        } else {
+            int maxOverlap = 20;
+            spacing = (maxVisibleWidth - cardWidth) / (cardCount - 1);
+            spacing = Math.max(spacing, maxOverlap);
+        }
+
+        for (int i = 0; i < cardCount; i++) {
+            CardUI cardUI = new CardUI(playerCards.get(i));
+            int xPosition = Math.min(i * spacing, maxVisibleWidth - cardWidth); // 카드가 잘리지 않도록 위치 조정
+            cardUI.setBounds(xPosition, 0, cardWidth, cardHeight); // 카드 위치 설정
             enableCardDrag(cardUI);
             cardPanel.add(cardUI);
-            System.out.println("손패에 카드 추가됨: " + card.getName());
+            System.out.println("손패에 카드 추가됨: " + playerCards.get(i).getName());
+
         }
+
         cardPanel.revalidate();
         cardPanel.repaint();
     }
+
+
 
     private void drawCard() {
         if (!allCards.isEmpty()) {
@@ -149,51 +253,51 @@ public class view_fight extends JPanel {
     private void enableCardDrag(CardUI cardUI) {
         DragSource ds = new DragSource();
         ds.createDefaultDragGestureRecognizer(cardUI, DnDConstants.ACTION_MOVE, dge -> {
-            Transferable transferable = new TransferableCard(cardUI.getCard()); // Card 객체를 전달
-            ds.startDrag(dge, DragSource.DefaultMoveDrop, transferable, null);
-        });
-
-        battlefieldPanel.setDropTarget(new DropTarget() {
-            @Override
-            public synchronized void drop(DropTargetDropEvent dtde) {
+            if (!isDragging) {
+                isDragging = true;
+                Transferable transferable = new TransferableCard(cardUI);
                 try {
-                    dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-                    Transferable transferable = dtde.getTransferable();
-                    Card droppedCard = (Card) transferable.getTransferData(new DataFlavor(Card.class, "Card"));
+                    ds.startDrag(dge, DragSource.DefaultMoveDrop, transferable, new DragSourceListener() {
+                        @Override
+                        public void dragEnter(DragSourceDragEvent dsde) {}
 
-                    // CardUI 생성
-                    CardUI droppedCardUI = new CardUI(droppedCard);
-                    Point dropPoint = dtde.getLocation();
-                    battlefieldPanel.add(droppedCardUI);
-                    droppedCardUI.setBounds(dropPoint.x - 50, dropPoint.y - 75, droppedCardUI.getPreferredSize().width, droppedCardUI.getPreferredSize().height);
+                        @Override
+                        public void dragOver(DragSourceDragEvent dsde) {}
 
-                    battlefieldPanel.revalidate();
-                    battlefieldPanel.repaint();
+                        @Override
+                        public void dropActionChanged(DragSourceDragEvent dsde) {}
 
-                    // 손패에서 제거
-                    playerCards.remove(droppedCard);
-                    displayPlayerCards();
+                        @Override
+                        public void dragExit(DragSourceEvent dse) {}
 
-                } catch (UnsupportedFlavorException | IOException ex) {
-                    ex.printStackTrace();
+                        @Override
+                        public void dragDropEnd(DragSourceDropEvent dsde) {
+                            isDragging = false; // 드래그가 끝나면 플래그 해제
+                        }
+                    });
+                } catch (InvalidDnDOperationException e) {
+                    e.printStackTrace();
+                    isDragging = false; // 예외 발생 시 플래그 해제
                 }
             }
         });
     }
 
 
-    private static class TransferableCard implements Transferable {
-        private final Card card;
-        private final DataFlavor[] flavors = {new DataFlavor(Card.class, "Card")};
 
-        public TransferableCard(Card card) {
-            this.card = card;
+
+    private static class TransferableCard implements Transferable {
+        private final CardUI cardUI;
+        private final DataFlavor[] flavors = {new DataFlavor(CardUI.class, "CardUI")};
+
+        public TransferableCard(CardUI cardUI) {
+            this.cardUI = cardUI;
         }
 
         @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
             if (flavor.equals(flavors[0])) {
-                return card;
+                return cardUI;
             } else {
                 throw new UnsupportedFlavorException(flavor);
             }

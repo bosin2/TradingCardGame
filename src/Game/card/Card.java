@@ -54,4 +54,17 @@ public class Card implements Serializable {
     public String toString() {
         return "Card{name='" + name + "', attack=" + attack + ", health=" + health + ", cost=" + cost + ", description='" + description + "', tag='" + tag + "', image='" + image + "'}";
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Card card = (Card) obj;
+        return name.equals(card.name); // 카드 이름이 같으면 동일한 카드로 인식
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode(); // 카드 이름을 기준으로 해시코드 생성
+    }
+
 }

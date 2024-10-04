@@ -20,7 +20,7 @@ public class start_intro extends JPanel {
     private Image backgroundImage;
     private MainFrame mainFrame;
 
-    private JButton nextButton; // 추가된 버튼
+    private JButton nextButton;
 
     public start_intro(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -71,7 +71,7 @@ public class start_intro extends JPanel {
         dialogueLabel.setForeground(Color.WHITE);
         dialogueLabel.setVerticalAlignment(SwingConstants.BOTTOM);
         dialogueLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        dialogueLabel.setBounds(50, 500, 1200, 200); // 위치와 크기 설정
+        dialogueLabel.setBounds(100, 500, 1200, 200); // 위치와 크기 설정
 
         // 사용자 지정 폰트 로드
         try {
@@ -79,7 +79,7 @@ public class start_intro extends JPanel {
             dialogueLabel.setFont(customFont);
         } catch (Exception e) {
             e.printStackTrace();
-            dialogueLabel.setFont(new Font("Serif", Font.PLAIN, 24));
+            dialogueLabel.setFont(new Font("Serif", Font.PLAIN, 30));
         }
 
         // 버튼 설정
