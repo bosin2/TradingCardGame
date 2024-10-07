@@ -1,6 +1,9 @@
 package Game.view;
 
 import javax.swing.*;
+
+import Game.button_manager.Default_button;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class start_intro extends JPanel {
 
     public start_intro(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        
 
         // 배경 이미지 로드
         backgroundImage = new ImageIcon(getClass().getResource("/resources/background/black.jpg")).getImage();
@@ -82,9 +86,10 @@ public class start_intro extends JPanel {
             dialogueLabel.setFont(new Font("Serif", Font.PLAIN, 30));
         }
 
+        Default_button buttonManager = new Default_button();
         // 버튼 설정
-        nextButton = new JButton("다음으로");
-        nextButton.setBounds(1100, 650, 150, 50); // 위치와 크기 설정
+        nextButton = buttonManager.createImageButton("다음으로");
+        nextButton.setBounds(1000, 550, 200, 100); // 위치와 크기 설정
         nextButton.setVisible(false); // 초기에는 보이지 않도록 설정
 
         // 버튼 클릭 시 view_fight로 전환

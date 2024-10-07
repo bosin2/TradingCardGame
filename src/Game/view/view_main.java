@@ -1,6 +1,7 @@
 package Game.view;
 
 import javax.swing.JPanel;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.CardLayout;
@@ -8,7 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import Game.control.Control;
+import Game.button_manager.Mainmenu_button;
 
 public class view_main extends JPanel {
 
@@ -40,7 +41,7 @@ public class view_main extends JPanel {
         add(button_3);
 
         // 컨트롤러 초기화
-        Control controller = new Control(this, mainFrame);
+        Mainmenu_button controller = new Mainmenu_button(this, mainFrame);
         controller.initController();
     }
     

@@ -50,27 +50,27 @@ public class CardUI extends JPanel implements Serializable {
 
                 // 카드 정보 라벨 설정 및 위치 지정
                 JLabel costLabel = new JLabel("" + card.getCost(), SwingConstants.LEFT);
-                costLabel.setFont(customFont.deriveFont(20f));
+                costLabel.setFont(customFont.deriveFont(30f));
                 costLabel.setForeground(Color.BLACK);
                 costLabel.setBounds(10, 10, 100, 30); // 코스트는 왼쪽 상단에 위치
 
                 JLabel nameLabel = new JLabel("" + card.getName(), SwingConstants.RIGHT);
-                nameLabel.setFont(customFont.deriveFont(20f));
+                nameLabel.setFont(customFont.deriveFont(30f));
                 nameLabel.setForeground(Color.BLACK);
                 nameLabel.setBounds(220, 10, 170, 30); // 이름은 오른쪽 상단에 위치
 
                 JLabel attackLabel = new JLabel("" + card.getAttack(), SwingConstants.LEFT);
-                attackLabel.setFont(customFont.deriveFont(20f));
+                attackLabel.setFont(customFont.deriveFont(30f));
                 attackLabel.setForeground(Color.BLACK);
                 attackLabel.setBounds(10, 560, 100, 30); // 공격력은 왼쪽 하단에 위치
 
                 JLabel healthLabel = new JLabel("" + card.getHealth(), SwingConstants.RIGHT);
-                healthLabel.setFont(customFont.deriveFont(20f));
+                healthLabel.setFont(customFont.deriveFont(30f));
                 healthLabel.setForeground(Color.BLACK);
                 healthLabel.setBounds(290, 560, 100, 30); // 체력은 오른쪽 하단에 위치
 
                 JLabel tagLabel = new JLabel("" + card.getTag(), SwingConstants.CENTER);
-                tagLabel.setFont(customFont.deriveFont(18f));
+                tagLabel.setFont(customFont.deriveFont(25f));
                 tagLabel.setForeground(Color.BLACK);
                 tagLabel.setBounds(100, 500, 200, 30); // 태그는 중앙 아랫쪽에 위치
 
@@ -145,7 +145,6 @@ public class CardUI extends JPanel implements Serializable {
 
         if (imageUrl != null) {
             cardImage = new ImageIcon(imageUrl).getImage();
-            System.out.println("카드 이미지 로드 성공: " + imagePath);
         } else {
             System.out.println("카드 이미지 로드 실패: " + imagePath);
             // 기본 이미지로 대체
@@ -164,7 +163,6 @@ public class CardUI extends JPanel implements Serializable {
             if (fontStream != null) {
                 customFont = Font.createFont(Font.TRUETYPE_FONT,
                                              fontStream);
-                System.out.println("폰트 로드 성공");
             } else {
                 System.out.println("폰트 파일을 찾을 수 없습니다.");
                 customFont = new Font("Serif", Font.PLAIN, 12);

@@ -48,5 +48,13 @@ public class Deck {
 
         return allCards;
     }
+    public List<Card> getPlayerDeck() {
+        return getAllCards(); // 현재는 모든 카드를 반환하지만, 필요시 구분 가능
+    }
+
+    // 적 덱을 반환하는 메서드
+    public List<Card> getEnemyDeck() {
+        return getAllCards(); // 현재는 모든 카드를 반환하지만, 필요시 구분 가능
+    }
 
 }

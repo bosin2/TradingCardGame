@@ -1,48 +1,80 @@
 package Game.view;
 
+import Game.button_manager.Default_button;
 import Game.card.Card;
 import Game.card.CardUI;
-import Game.card.Deck;
+import Game.logic.basicfight;
 
 import javax.swing.*;
 import java.awt.*;
-import Game.card.card_loder;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.List;
 
 public class view_fight extends JPanel {
-	
+
     private MainFrame mainFrame;
-    private boolean isDragging = false; // 드래그 앤 드롭 상태 플래그 추가
-    private card_loder loader = new card_loder();
+    private boolean isDragging = false;
     private static final long serialVersionUID = 1L;
     private JPanel cardPanel;
-    private JPanel battlefieldPanel;
-    private List<Card> playerCards = new ArrayList<>();
-    private List<Card> allCards = new ArrayList<>();
+    private JPanel playerBattlefieldPanel;
+    private JPanel enemyBattlefieldPanel;
     private Image backgroundImage;
-    private JPanel[] fieldSlots = new JPanel[5]; // 5개의 슬롯 패널
-    private Card[] fieldCards = new Card[5]; // 각 슬롯에 배치된 카드
-
+    private basicfight battleManager; // 전투 매니저
+    private JPanel[] playerFieldSlots = new JPanel[5];
+    private JPanel[] enemyFieldSlots = new JPanel[5];
 
     public view_fight(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        this.battleManager = new basicfight(); // 전투 매니저 초기화
+        
         setLayout(null);
         setPreferredSize(new Dimension(1300, 800));
-        setSize(new Dimension(1300, 800)); // 크기를 명시적으로 지정
+        setSize(new Dimension(1300, 800));
 
+        battleManager.setAttackListener((attackerIndex, defenderIndex, isPlayerAttacker) -> {
+            CardUI attackerCardUI = null;
+            int targetX, targetY;
 
+            if (isPlayerAttacker) {
+                attackerCardUI = (CardUI) playerFieldSlots[attackerIndex].getComponent(0);
+                if (defenderIndex == -1) {
+                    // 적 본체를 공격하는 경우
+                    targetX = enemyBattlefieldPanel.getX() + enemyBattlefieldPanel.getWidth() / 2;
+                    targetY = enemyBattlefieldPanel.getY();
+                } else {
+                    // 적 카드 공격
+                    targetX = enemyFieldSlots[defenderIndex].getX();
+                    targetY = enemyFieldSlots[defenderIndex].getY();
+                }
+            } else {
+                attackerCardUI = (CardUI) enemyFieldSlots[attackerIndex].getComponent(0);
+                if (defenderIndex == -1) {
+                    // 플레이어 본체를 공격하는 경우
+                    targetX = playerBattlefieldPanel.getX() + playerBattlefieldPanel.getWidth() / 2;
+                    targetY = playerBattlefieldPanel.getY();
+                } else {
+                    // 플레이어 카드 공격
+                    targetX = playerFieldSlots[defenderIndex].getX();
+                    targetY = playerFieldSlots[defenderIndex].getY();
+                }
+            }
 
+            if (attackerCardUI != null) {
+                System.out.println("공격 애니메이션 시작: 카드 UI가 존재합니다.");
+                // 공격 애니메이션 추가
+                moveCardAnimation(attackerCardUI, targetX, targetY);
+            } else {
+                System.out.println("공격 애니메이션 실행 실패: 카드 UI가 없습니다.");
+            }
+        });
+
+        
         // 배경 이미지 로드
         backgroundImage = new ImageIcon(getClass().getResource("/resources/background/fightEX.png")).getImage();
         if (backgroundImage == null) {
@@ -51,43 +83,10 @@ public class view_fight extends JPanel {
             System.out.println("배경 이미지 로드 성공");
         }
 
-        // 카드 로드
-        loadCards();
-
-        // 초기 손패 구성
-        if (allCards.size() >= 5) {
-            Collections.shuffle(allCards);
-            for (int i = 0; i < 5; i++) {
-                this.playerCards.add(allCards.remove(0));
-            }
-        }
-
-        System.out.println("초기 손패 카드 수: " + playerCards.size());
-
         // UI 초기화
         initUI();
+
         System.out.println("view_fight 패널 생성 완료");
-        System.out.println("view_fight 크기: " + getSize());
-        System.out.println("battlefieldPanel 크기: " + battlefieldPanel.getSize());
-        System.out.println("cardPanel 크기: " + cardPanel.getSize());
-
-    }
-
-    private void loadCards() {
-        System.out.println("loadCards() 메서드 시작됨");
-        InputStream inputStream = getClass().getResourceAsStream("/resources/data/StartDeck.json");
-        if (inputStream != null) {
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            Deck deck = loader.loadDeck(reader);
-            if (deck != null) {
-                allCards = deck.getAllCards();
-                System.out.println("로딩된 카드 수: " + allCards.size());
-            } else {
-                System.out.println("덱을 불러오지 못했습니다.");
-            }
-        } else {
-            System.out.println("Deck 파일을 찾을 수 없습니다.");
-        }
     }
 
     @Override
@@ -95,122 +94,119 @@ public class view_fight extends JPanel {
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            // System.out.println("배경 이미지 그리기 완료"); // 디버깅 메시지
         } else {
             System.out.println("배경 이미지가 없습니다!");
         }
     }
 
     private void initUI() {
-        System.out.println("UI 초기화 중");
-        
-        setLayout(null); // 절대 위치 사용
+        setLayout(null);
 
-     // 배틀필드 패널 설정
-        battlefieldPanel = new JPanel(new GridLayout(1, 5)); // 1행 5열의 그리드 레이아웃
-        battlefieldPanel.setOpaque(false);
-        battlefieldPanel.setBounds(50, 300, 770, 230); // 위치와 크기 설정
-        add(battlefieldPanel);
-                
+        // 적 배틀필드 패널 설정
+        enemyBattlefieldPanel = new JPanel(new GridLayout(1, 5));
+        enemyBattlefieldPanel.setOpaque(false);
+        enemyBattlefieldPanel.setBounds(50, 50, 770, 230);
+        add(enemyBattlefieldPanel);
         for (int i = 0; i < 5; i++) {
-            JPanel slotPanel = new JPanel(null); // 슬롯마다 null 레이아웃 사용
+            JPanel slotPanel = new JPanel(null);
             slotPanel.setOpaque(false);
-            slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE)); // 슬롯 구분을 위한 테두리
-            battlefieldPanel.add(slotPanel);
-            fieldSlots[i] = slotPanel;
-            
+            slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+            enemyBattlefieldPanel.add(slotPanel);
+            enemyFieldSlots[i] = slotPanel;
+        }
+
+        // 플레이어 배틀필드 패널 설정
+        playerBattlefieldPanel = new JPanel(new GridLayout(1, 5));
+        playerBattlefieldPanel.setOpaque(false);
+        playerBattlefieldPanel.setBounds(50, 300, 770, 230);
+        add(playerBattlefieldPanel);
+        for (int i = 0; i < 5; i++) {
+            JPanel slotPanel = new JPanel(null);
+            slotPanel.setOpaque(false);
+            slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+            playerBattlefieldPanel.add(slotPanel);
+            playerFieldSlots[i] = slotPanel;
+
             final int slotIndex = i;
             slotPanel.setDropTarget(new DropTarget() {
                 @Override
                 public synchronized void drop(DropTargetDropEvent dtde) {
                     if (isDragging) {
-                        // 드래그 앤 드롭 중복 방지
                         isDragging = false;
                     }
                     try {
-                        // 슬롯에 이미 카드가 있으면 드롭 불가
-                        if (fieldCards[slotIndex] != null) {
+                        if (!battleManager.canPlaceCardInPlayerField(slotIndex)) {
                             dtde.rejectDrop();
                             return;
                         }
-
                         dtde.acceptDrop(DnDConstants.ACTION_MOVE);
                         Transferable transferable = dtde.getTransferable();
                         CardUI droppedCardUI = (CardUI) transferable.getTransferData(new DataFlavor(CardUI.class, "CardUI"));
-
-                        // 손패에서 해당 카드 제거
                         Card droppedCard = droppedCardUI.getCard();
-                        boolean removed = playerCards.remove(droppedCard);
-                        if (removed) {
-                            System.out.println("카드손패에서제거성공: " + droppedCard.getName());
-                            displayPlayerCards();
+
+                        if (battleManager.placePlayerCard(droppedCard, slotIndex)) {
+                            slotPanel.add(droppedCardUI);
+                            droppedCardUI.setBounds(0, 0, droppedCardUI.getPreferredSize().width, droppedCardUI.getPreferredSize().height);
+                            droppedCardUI.resetFont();
+                            displayPlayerCards(); // 손패에서 카드가 사라졌으므로 다시 그리기
+
+                            updateAfterBattle();
                         } else {
                             System.out.println("카드를 손패에서 찾을 수 없습니다.");
                         }
-
-                        // 슬롯에 카드 추가
-                        slotPanel.add(droppedCardUI);
-                        droppedCardUI.setBounds(0, 0, droppedCardUI.getPreferredSize().width, droppedCardUI.getPreferredSize().height);
-                        droppedCardUI.resetFont();
-
-                        // 슬롯에 배치된 카드 기록
-                        fieldCards[slotIndex] = droppedCard;
-
-                        // 패널들 다시 그리기
-                        slotPanel.revalidate();
-                        slotPanel.repaint();
-
                     } catch (UnsupportedFlavorException | IOException ex) {
                         ex.printStackTrace();
                     } finally {
-                        // 드래그 앤 드롭 상태 해제
                         isDragging = false;
                     }
                 }
             });
         }
 
-        
-        JButton endTurnButton = new JButton("턴 종료");
-        endTurnButton.setBounds(1000, 461, 100, 30);
-        endTurnButton.setLayout(null); // 절대 위치 사용
-        endTurnButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		drawCard();
-        	}
+        Default_button buttonManager = new Default_button();
+        JButton endTurnButton = buttonManager.createImageButton("턴 종료");
+        endTurnButton.setBounds(1000, 461, 200, 100);
+        endTurnButton.setLayout(null);
+        endTurnButton.addActionListener(e -> {
+            if (battleManager.isPlayerTurn()) {
+                battleManager.playerEndTurn();
+            } else {
+                battleManager.enemyEndTurn();
+            }
+            battleManager.endCurrentTurn();
+            battleManager.drawCard(); // 턴 종료 시 카드 드로우 추가
+            displayPlayerCards(); // 턴 종료 후 손패 UI 업데이트
+            updateAfterBattle();
+            changeTurn();
         });
-        add(endTurnButton);
-        
 
+        add(endTurnButton);
 
         // 카드 패널 설정 (하단에 배치)
         cardPanel = new JPanel();
         cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         cardPanel.setOpaque(false);
-        cardPanel.setBounds(0, 550, 1000, 500); // 위치와 크기 설정
+        cardPanel.setBounds(0, 550, 1000, 500);
         add(cardPanel);
-        
-        
-                
 
-        // 손패 카드 보여주기
         displayPlayerCards();
-        System.out.println("카드보여주기완료");
+    }
 
-        System.out.println("UI 불러오기 완료");
-        revalidate();
-        repaint();
-
+    private void changeTurn() {
+        if (battleManager.isPlayerTurn()) {
+            updateEnemyCards();
+        }
     }
 
     private void displayPlayerCards() {
         cardPanel.removeAll();
-        cardPanel.setLayout(null); // 패널 레이아웃을 null로 설정해서 절대 위치를 사용
+        cardPanel.setLayout(null);
 
-        int cardWidth = 150; // 카드의 너비 (픽셀)
-        int cardHeight = 200; // 카드의 높이 (픽셀)
-        int maxVisibleWidth = cardPanel.getWidth(); // 카드 패널의 너비
-        int cardCount = playerCards.size(); // 손패의 카드 수
+        int cardWidth = 150;
+        int cardHeight = 200;
+        int maxVisibleWidth = cardPanel.getWidth();
+        List<Card> handCards = battleManager.getPlayerHand();
+        int cardCount = handCards.size();
 
         int spacing;
 
@@ -224,30 +220,40 @@ public class view_fight extends JPanel {
         }
 
         for (int i = 0; i < cardCount; i++) {
-            CardUI cardUI = new CardUI(playerCards.get(i));
-            int xPosition = Math.min(i * spacing, maxVisibleWidth - cardWidth); // 카드가 잘리지 않도록 위치 조정
-            cardUI.setBounds(xPosition, 0, cardWidth, cardHeight); // 카드 위치 설정
+            CardUI cardUI = new CardUI(handCards.get(i));
+            int xPosition = Math.min(i * spacing, maxVisibleWidth - cardWidth);
+            cardUI.setBounds(xPosition, 0, cardWidth, cardHeight);
             enableCardDrag(cardUI);
             cardPanel.add(cardUI);
-            System.out.println("손패에 카드 추가됨: " + playerCards.get(i).getName());
-
         }
 
         cardPanel.revalidate();
         cardPanel.repaint();
     }
 
+    private void updateEnemyCards() {
+        battleManager.enemyPlaceCards();
+        updateFieldUI(enemyFieldSlots, battleManager.getEnemyField());
+    }
 
-
-    private void drawCard() {
-        if (!allCards.isEmpty()) {
-            Card drawnCard = allCards.remove(0);
-            playerCards.add(drawnCard);
-            System.out.println("카드 뽑음: " + drawnCard.getName());
-            displayPlayerCards();
-        } else {
-            System.out.println("더 이상 뽑을 카드가 없습니다.");
+    private void updateFieldUI(JPanel[] fieldSlots, List<Card> updatedField) {
+        for (int i = 0; i < fieldSlots.length; i++) {
+            fieldSlots[i].removeAll();
+            Card updatedCard = updatedField.get(i);
+            if (updatedCard != null) {
+                CardUI cardUI = new CardUI(updatedCard);
+                fieldSlots[i].add(cardUI);
+                cardUI.setBounds(0, 0, 150, 200);
+                cardUI.resetFont();
+            }
+            fieldSlots[i].revalidate();
+            fieldSlots[i].repaint();
         }
+    }
+
+    private void updateAfterBattle() {
+        updateFieldUI(playerFieldSlots, battleManager.getPlayerField());
+        updateFieldUI(enemyFieldSlots, battleManager.getEnemyField());
     }
 
     private void enableCardDrag(CardUI cardUI) {
@@ -272,15 +278,68 @@ public class view_fight extends JPanel {
 
                         @Override
                         public void dragDropEnd(DragSourceDropEvent dsde) {
-                            isDragging = false; // 드래그가 끝나면 플래그 해제
+                            isDragging = false;
                         }
                     });
                 } catch (InvalidDnDOperationException e) {
                     e.printStackTrace();
-                    isDragging = false; // 예외 발생 시 플래그 해제
+                    isDragging = false;
                 }
             }
         });
+    }
+    
+    
+    private void moveCardAnimation(CardUI cardUI, int targetX, int targetY) {
+        new Thread(() -> {
+            try {
+                SwingUtilities.invokeAndWait(() -> {
+                    if (cardUI.getParent() == null) {
+                        System.err.println("카드 UI의 부모가 없습니다. 애니메이션을 중지합니다.");
+                        return;
+                    }
+                });
+
+                Point startPoint = cardUI.getLocation();
+                int startX = startPoint.x;
+                int startY = startPoint.y;
+
+                int duration = 1000; // 애니메이션 총 시간 (밀리초)
+                int steps = 50;      // 애니메이션 단계 수
+                int delay = duration / steps;
+
+                for (int i = 0; i < steps; i++) {
+                    if (cardUI.getParent() == null) {
+                        System.err.println("애니메이션 도중 부모가 제거되었습니다. 애니메이션 중지.");
+                        return;
+                    }
+
+                    int currentX = startX + (int) ((targetX - startX) * (i / (float) steps));
+                    int currentY = startY + (int) ((targetY - startY) * (i / (float) steps));
+
+                    SwingUtilities.invokeLater(() -> {
+                        cardUI.setLocation(currentX, currentY);
+                        cardUI.getParent().revalidate();
+                        cardUI.getParent().repaint();
+                    });
+
+                    Thread.sleep(delay);
+                }
+
+                SwingUtilities.invokeLater(() -> {
+                    if (cardUI.getParent() != null) {
+                        cardUI.setLocation(targetX, targetY);
+                        cardUI.getParent().revalidate();
+                        cardUI.getParent().repaint();
+                        System.out.println("카드 최종 위치 설정 완료: x=" + targetX + ", y=" + targetY);
+                    } else {
+                        System.err.println("카드 최종 위치 설정 시 부모가 존재하지 않습니다.");
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 

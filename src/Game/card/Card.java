@@ -10,6 +10,7 @@ public class Card implements Serializable {
     private String description;
     private String tag;
     private String image;  // 이미지 경로 추가
+    
 
     public Card(String name, int attack, int health, int cost, String description, String tag, String image) {
         this.name = name;
@@ -48,6 +49,18 @@ public class Card implements Serializable {
 
     public String getImage() {
         return image;
+    }
+ // 체력 감소 처리 메서드
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+    }
+
+    // 카드가 소멸됐는지 확인하는 메서드
+    public boolean isDestroyed() {
+        return this.health <= 0;
     }
 
     @Override
