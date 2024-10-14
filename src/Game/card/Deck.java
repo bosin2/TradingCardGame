@@ -1,5 +1,6 @@
 package Game.card;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +46,12 @@ public class Deck {
                 allCards.addAll(powerList);
             }
         }
-
+        Collections.shuffle(allCards);
+        
         return allCards;
     }
+    
+    
     public List<Card> getPlayerDeck() {
         return getAllCards(); // 현재는 모든 카드를 반환하지만, 필요시 구분 가능
     }

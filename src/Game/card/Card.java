@@ -73,6 +73,7 @@ public class Card implements Serializable {
         if (obj == null || getClass() != obj.getClass()) return false;
         Card card = (Card) obj;
         return name.equals(card.name); // 카드 이름이 같으면 동일한 카드로 인식
+        
     }
 
     @Override

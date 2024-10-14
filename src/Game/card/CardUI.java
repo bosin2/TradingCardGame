@@ -1,6 +1,7 @@
 package Game.card;
 
 import javax.swing.*;
+import java.util.Queue;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,6 +10,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.LinkedList;
 import java.awt.image.BufferedImage;
 
 public class CardUI extends JPanel implements Serializable {
@@ -17,6 +19,7 @@ public class CardUI extends JPanel implements Serializable {
     private Card card;
     private transient Image cardImage;
     private transient Font customFont;
+    private Queue<Point> animationQueue = new LinkedList<Point>();
     private JLabel nameLabel;
     private JLabel tagLabel;
     private JLabel attackLabel;
@@ -233,6 +236,22 @@ public class CardUI extends JPanel implements Serializable {
         return new Dimension(CARD_WIDTH, CARD_HEIGHT);
 
     }
+
+    public void addAnimation(Point point) {
+        animationQueue.add(point);
+    }
+
+    public Queue<Point> getAnimationQueue() {
+        return animationQueue;
+    }
+    
+    public void updateCardState(Card updatedCard) {
+        this.card = updatedCard;
+        healthLabel.setText("" + card.getHealth()); // 체력 업데이트
+        revalidate();
+        repaint();
+    }
+
 
     // 체력 업데이트 메서드
     public void updateHealth(int newHealth) {

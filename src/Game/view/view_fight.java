@@ -9,72 +9,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.List;
+import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
-public class view_fight extends JPanel {
 
+public class view_fight extends JPanel implements basicfight.GameEventListener {
     private MainFrame mainFrame;
+    private basicfight battleManager;
     private boolean isDragging = false;
     private static final long serialVersionUID = 1L;
     private JPanel cardPanel;
     private JPanel playerBattlefieldPanel;
     private JPanel enemyBattlefieldPanel;
     private Image backgroundImage;
-    private basicfight battleManager; // 전투 매니저
     private JPanel[] playerFieldSlots = new JPanel[5];
     private JPanel[] enemyFieldSlots = new JPanel[5];
+    private JButton endTurnButton;
+    private Queue<Runnable> animationQueue = new LinkedList<>();
 
     public view_fight(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        this.battleManager = new basicfight(); // 전투 매니저 초기화
-        
+        this.battleManager = new basicfight(); // 게임 로직 초기화
+        this.battleManager.setGameEventListener(this); // 이벤트 리스너 설정
+
         setLayout(null);
         setPreferredSize(new Dimension(1300, 800));
         setSize(new Dimension(1300, 800));
 
-        battleManager.setAttackListener((attackerIndex, defenderIndex, isPlayerAttacker) -> {
-            CardUI attackerCardUI = null;
-            int targetX, targetY;
-
-            if (isPlayerAttacker) {
-                attackerCardUI = (CardUI) playerFieldSlots[attackerIndex].getComponent(0);
-                if (defenderIndex == -1) {
-                    // 적 본체를 공격하는 경우
-                    targetX = enemyBattlefieldPanel.getX() + enemyBattlefieldPanel.getWidth() / 2;
-                    targetY = enemyBattlefieldPanel.getY();
-                } else {
-                    // 적 카드 공격
-                    targetX = enemyFieldSlots[defenderIndex].getX();
-                    targetY = enemyFieldSlots[defenderIndex].getY();
-                }
-            } else {
-                attackerCardUI = (CardUI) enemyFieldSlots[attackerIndex].getComponent(0);
-                if (defenderIndex == -1) {
-                    // 플레이어 본체를 공격하는 경우
-                    targetX = playerBattlefieldPanel.getX() + playerBattlefieldPanel.getWidth() / 2;
-                    targetY = playerBattlefieldPanel.getY();
-                } else {
-                    // 플레이어 카드 공격
-                    targetX = playerFieldSlots[defenderIndex].getX();
-                    targetY = playerFieldSlots[defenderIndex].getY();
-                }
-            }
-
-            if (attackerCardUI != null) {
-                System.out.println("공격 애니메이션 시작: 카드 UI가 존재합니다.");
-                // 공격 애니메이션 추가
-                moveCardAnimation(attackerCardUI, targetX, targetY);
-            } else {
-                System.out.println("공격 애니메이션 실행 실패: 카드 UI가 없습니다.");
-            }
-        });
-
-        
         // 배경 이미지 로드
         backgroundImage = new ImageIcon(getClass().getResource("/resources/background/fightEX.png")).getImage();
         if (backgroundImage == null) {
@@ -86,7 +50,11 @@ public class view_fight extends JPanel {
         // UI 초기화
         initUI();
 
-        System.out.println("view_fight 패널 생성 완료");
+        if (battleManager.isPlayerTurn()) {
+            startPlayerTurn();
+        } else {
+            startEnemyTurn();
+        }
     }
 
     @Override
@@ -149,12 +117,11 @@ public class view_fight extends JPanel {
                             droppedCardUI.setBounds(0, 0, droppedCardUI.getPreferredSize().width, droppedCardUI.getPreferredSize().height);
                             droppedCardUI.resetFont();
                             displayPlayerCards(); // 손패에서 카드가 사라졌으므로 다시 그리기
-
                             updateAfterBattle();
                         } else {
                             System.out.println("카드를 손패에서 찾을 수 없습니다.");
                         }
-                    } catch (UnsupportedFlavorException | IOException ex) {
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     } finally {
                         isDragging = false;
@@ -164,23 +131,16 @@ public class view_fight extends JPanel {
         }
 
         Default_button buttonManager = new Default_button();
-        JButton endTurnButton = buttonManager.createImageButton("턴 종료");
+        endTurnButton = buttonManager.createImageButton("턴 종료");
         endTurnButton.setBounds(1000, 461, 200, 100);
         endTurnButton.setLayout(null);
-        endTurnButton.addActionListener(e -> {
-            if (battleManager.isPlayerTurn()) {
-                battleManager.playerEndTurn();
-            } else {
-                battleManager.enemyEndTurn();
-            }
-            battleManager.endCurrentTurn();
-            battleManager.drawCard(); // 턴 종료 시 카드 드로우 추가
-            displayPlayerCards(); // 턴 종료 후 손패 UI 업데이트
-            updateAfterBattle();
-            changeTurn();
-        });
-
+        endTurnButton.setVisible(true); // 첫 턴이 플레이어의 턴이므로 버튼을 보이도록 설정
         add(endTurnButton);
+
+        endTurnButton.addActionListener(e -> {
+            endTurnButton.setVisible(false); // 플레이어 턴 종료 시 버튼 숨김
+            battleManager.endPlayerTurn(); // 게임 로직에 턴 종료 요청
+        });
 
         // 카드 패널 설정 (하단에 배치)
         cardPanel = new JPanel();
@@ -192,10 +152,18 @@ public class view_fight extends JPanel {
         displayPlayerCards();
     }
 
-    private void changeTurn() {
-        if (battleManager.isPlayerTurn()) {
-            updateEnemyCards();
-        }
+    private void startPlayerTurn() {
+        System.out.println("플레이어 턴 시작");
+        endTurnButton.setVisible(true);
+        displayPlayerCards();
+        updateAfterBattle();
+    }
+
+    private void startEnemyTurn() {
+        System.out.println("적 턴 시작");
+        endTurnButton.setVisible(false);
+        updateEnemyCards();
+        updateAfterBattle();
     }
 
     private void displayPlayerCards() {
@@ -232,24 +200,37 @@ public class view_fight extends JPanel {
     }
 
     private void updateEnemyCards() {
-        battleManager.enemyPlaceCards();
         updateFieldUI(enemyFieldSlots, battleManager.getEnemyField());
     }
 
     private void updateFieldUI(JPanel[] fieldSlots, List<Card> updatedField) {
         for (int i = 0; i < fieldSlots.length; i++) {
-            fieldSlots[i].removeAll();
             Card updatedCard = updatedField.get(i);
             if (updatedCard != null) {
-                CardUI cardUI = new CardUI(updatedCard);
-                fieldSlots[i].add(cardUI);
-                cardUI.setBounds(0, 0, 150, 200);
-                cardUI.resetFont();
+                if (fieldSlots[i].getComponentCount() == 0) {
+                    // 슬롯에 CardUI가 없으면 새로 생성
+                    CardUI cardUI = new CardUI(updatedCard);
+                    fieldSlots[i].setLayout(null);
+                    cardUI.setBounds(0, 0, 150, 200);
+                    cardUI.resetFont();
+                    fieldSlots[i].add(cardUI);
+                } else {
+                    // 기존 CardUI 재사용 및 카드 상태 업데이트
+                    CardUI existingCardUI = (CardUI) fieldSlots[i].getComponent(0);
+                    existingCardUI.updateCardState(updatedCard); // 카드 상태 업데이트
+                }
+            } else {
+                // 슬롯에 카드가 없으면 CardUI 제거
+                if (fieldSlots[i].getComponentCount() > 0) {
+                    fieldSlots[i].removeAll();
+                }
             }
             fieldSlots[i].revalidate();
             fieldSlots[i].repaint();
         }
     }
+
+
 
     private void updateAfterBattle() {
         updateFieldUI(playerFieldSlots, battleManager.getPlayerField());
@@ -281,65 +262,127 @@ public class view_fight extends JPanel {
                             isDragging = false;
                         }
                     });
-                } catch (InvalidDnDOperationException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     isDragging = false;
                 }
             }
         });
     }
-    
-    
-    private void moveCardAnimation(CardUI cardUI, int targetX, int targetY) {
-        new Thread(() -> {
-            try {
-                SwingUtilities.invokeAndWait(() -> {
-                    if (cardUI.getParent() == null) {
-                        System.err.println("카드 UI의 부모가 없습니다. 애니메이션을 중지합니다.");
-                        return;
-                    }
-                });
 
-                Point startPoint = cardUI.getLocation();
-                int startX = startPoint.x;
-                int startY = startPoint.y;
+    // 공격 애니메이션 실행
+    private void moveCardAnimation(CardUI cardUI, int offsetX, int offsetY, Runnable onComplete) {
+        animationQueue.add(() -> startAnimation(cardUI, offsetX, offsetY, onComplete));
+        
+        // 큐에 첫 번째 작업이라면 즉시 실행
+        if (animationQueue.size() == 1) {
+            System.out.println("애니메이션 시작: 새로운 작업 실행");
+            animationQueue.peek().run(); // 직접 실행
+        }
+    }
 
-                int duration = 1000; // 애니메이션 총 시간 (밀리초)
-                int steps = 50;      // 애니메이션 단계 수
+
+    private void startAnimation(CardUI cardUI, int offsetX, int offsetY, Runnable onComplete) {
+        SwingWorker<Void, Point> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                int duration = 300;
+                int steps = 25;
                 int delay = duration / steps;
 
+                Point originalLocation = cardUI.getLocation();
+                int originalX = originalLocation.x;
+                int originalY = originalLocation.y;
+
+                int targetX = originalX + offsetX;
+                int targetY = originalY + offsetY;
+
+                // 목표 위치로 이동
                 for (int i = 0; i < steps; i++) {
-                    if (cardUI.getParent() == null) {
-                        System.err.println("애니메이션 도중 부모가 제거되었습니다. 애니메이션 중지.");
-                        return;
-                    }
-
-                    int currentX = startX + (int) ((targetX - startX) * (i / (float) steps));
-                    int currentY = startY + (int) ((targetY - startY) * (i / (float) steps));
-
-                    SwingUtilities.invokeLater(() -> {
-                        cardUI.setLocation(currentX, currentY);
-                        cardUI.getParent().revalidate();
-                        cardUI.getParent().repaint();
-                    });
-
+                    int currentX = originalX + (int) ((targetX - originalX) * (i / (float) steps));
+                    int currentY = originalY + (int) ((targetY - originalY) * (i / (float) steps));
+                    publish(new Point(currentX, currentY));
                     Thread.sleep(delay);
                 }
 
-                SwingUtilities.invokeLater(() -> {
-                    if (cardUI.getParent() != null) {
-                        cardUI.setLocation(targetX, targetY);
-                        cardUI.getParent().revalidate();
-                        cardUI.getParent().repaint();
-                        System.out.println("카드 최종 위치 설정 완료: x=" + targetX + ", y=" + targetY);
-                    } else {
-                        System.err.println("카드 최종 위치 설정 시 부모가 존재하지 않습니다.");
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+                // 다시 원래 위치로 돌아옴
+                for (int i = steps; i >= 0; i--) {
+                    int currentX = originalX + (int) ((targetX - originalX) * (i / (float) steps));
+                    int currentY = originalY + (int) ((targetY - originalY) * (i / (float) steps));
+                    publish(new Point(currentX, currentY));
+                    Thread.sleep(delay);
+                }
+
+                return null;
             }
-        }).start();
+
+            @Override
+            protected void process(List<Point> chunks) {
+                if (cardUI.getParent() == null) {
+                    JPanel correctParent = findCorrectParentForCard(cardUI);
+                    if (correctParent != null) {
+                        correctParent.setLayout(null); // 레이아웃을 null로 설정
+                        correctParent.add(cardUI);
+                        correctParent.revalidate();
+                        correctParent.repaint();
+                    } else {
+                        System.out.println("올바른 부모를 찾을 수 없습니다.");
+                        return;
+                    }
+                }
+                Point point = chunks.get(chunks.size() - 1);
+                cardUI.setLocation(point);
+                cardUI.getParent().revalidate();
+                cardUI.getParent().repaint();
+            }
+
+
+            @Override
+            protected void done() {
+                try {
+                    get(); // 예외가 발생했는지 확인
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (onComplete != null) {
+                        SwingUtilities.invokeLater(() -> {
+                            onComplete.run(); // 애니메이션 완료 후 작업 수행
+                            updateAfterBattle(); // 애니메이션 완료 후 필드 업데이트
+                        });
+                    }
+                    animationQueue.poll(); // 현재 애니메이션 완료
+                    if (!animationQueue.isEmpty()) {
+                        animationQueue.peek().run(); // 다음 애니메이션 실행
+                    }
+                }
+            }
+
+        };
+
+        worker.execute();
+    }
+
+    // 카드를 포함해야 할 올바른 부모 컨테이너를 찾는 메서드
+    private JPanel findCorrectParentForCard(CardUI cardUI) {
+        // 플레이어 필드 검사
+        for (int i = 0; i < playerFieldSlots.length; i++) {
+            if (playerFieldSlots[i].getComponentCount() > 0) {
+                CardUI ui = (CardUI) playerFieldSlots[i].getComponent(0);
+                if (ui.getCard().equals(cardUI.getCard())) {
+                    return playerFieldSlots[i];
+                }
+            }
+        }
+        // 적 필드 검사
+        for (int i = 0; i < enemyFieldSlots.length; i++) {
+            if (enemyFieldSlots[i].getComponentCount() > 0) {
+                CardUI ui = (CardUI) enemyFieldSlots[i].getComponent(0);
+                if (ui.getCard().equals(cardUI.getCard())) {
+                    return enemyFieldSlots[i];
+                }
+            }
+        }
+        return null; // 올바른 부모를 찾지 못한 경우
     }
 
 
@@ -354,11 +397,11 @@ public class view_fight extends JPanel {
         }
 
         @Override
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+        public Object getTransferData(DataFlavor flavor) {
             if (flavor.equals(flavors[0])) {
                 return cardUI;
             } else {
-                throw new UnsupportedFlavorException(flavor);
+                return null;
             }
         }
 
@@ -371,5 +414,79 @@ public class view_fight extends JPanel {
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return flavor.equals(flavors[0]);
         }
+    }
+
+    // GameEventListener 인터페이스 구현
+    @Override
+    public void onAttack(int attackerIndex, int defenderIndex, boolean isPlayerAttacker, Runnable performAttack) {
+        SwingUtilities.invokeLater(() -> {
+            CardUI attackerCardUI = getCardUI(isPlayerAttacker, attackerIndex);
+            int moveDistanceY = 80; // 이동할 거리
+
+            if (attackerCardUI == null) {
+                System.out.println("공격 애니메이션 실행 실패: 공격자 카드 UI가 없습니다.");
+                performAttack.run(); // 애니메이션 없이 공격 수행
+                updateAfterBattle();
+            } else {
+                System.out.println("공격 애니메이션 시작: 카드 UI가 존재합니다.");
+
+                Runnable afterAnimation = () -> {
+                    performAttack.run(); // 공격 로직 실행
+                    SwingUtilities.invokeLater(this::updateAfterBattle); // 애니메이션 완료 후 UI 업데이트
+                };
+
+
+                int targetY = isPlayerAttacker ? -moveDistanceY : moveDistanceY;
+                moveCardAnimation(attackerCardUI, 0, targetY, afterAnimation);
+            }
+        });
+    }
+
+    
+    private CardUI getCardUI(boolean isPlayer, int index) {
+        JPanel[] fieldSlots = isPlayer ? playerFieldSlots : enemyFieldSlots;
+        if (index >= 0 && index < fieldSlots.length) {
+            if (fieldSlots[index].getComponentCount() > 0) {
+                return (CardUI) fieldSlots[index].getComponent(0);
+            }
+        }
+        return null;
+    }
+
+
+
+
+    @Override
+    public void onTurnChange(boolean isPlayerTurn) {
+        SwingUtilities.invokeLater(() -> {
+            if (isPlayerTurn) {
+                startPlayerTurn();
+            } else {
+                startEnemyTurn();
+            }
+        });
+    }
+
+    @Override
+    public void onGameOver(boolean playerWon) {
+        SwingUtilities.invokeLater(() -> {
+            if (playerWon) {
+                System.out.println("게임 승리!");
+                // 승리 화면 표시 로직 추가
+            } else {
+                System.out.println("게임 패배...");
+                // 패배 화면 표시 로직 추가
+            }
+        });
+    }
+
+    @Override
+    public void onCardDrawn(Card drawnCard) {
+        SwingUtilities.invokeLater(this::displayPlayerCards);
+    }
+
+    @Override
+    public void onFieldUpdate() {
+        SwingUtilities.invokeLater(this::updateAfterBattle);
     }
 }

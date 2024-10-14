@@ -50,23 +50,23 @@ public class start_intro extends JPanel {
 
         // 대사 리스트 설정
         dialogues = new ArrayList<>();
-        dialogues.add("하아... 이번 시험도 망쳤어...");
-        dialogues.add("...");
-        dialogues.add("이번에도 망치면 진짜 학사경고야...");
-        dialogues.add("어떡하지...하아");
-        dialogues.add("??? : 임동현군 ?");
-        dialogues.add("하아...");
-        dialogues.add("??? : 임동현군 맞나요 ?");
-        dialogues.add("헉! 교,교수님?");
-        dialogues.add("(교수님들이 왜 여기에...?)");
-        dialogues.add("교수진 : 다름이 아니고 임동현군의 성적이 처참해서...");
-        dialogues.add("네...?");
-        dialogues.add("교수진 : 그래서 내부회의를 통해 동현군에게 기회를 주기로 했어요");
-        dialogues.add("네...????");
-        dialogues.add("교수진 : 우리랑 카드게임을 해서 승리하면, 성적을 올려주기로 했네");
-        dialogues.add("(나에게 이런 기회가...?)");
-        dialogues.add("(꿀꺽,)교수님들...! 제가 완승한다면 A, A로 주세욧...! 혹시, A+도?");
-        dialogues.add("교수진 : 그래 알겠네, ...뭐? A+ ?");
+        //dialogues.add("하아... 이번 시험도 망쳤어...");
+        //dialogues.add("...");
+        //dialogues.add("이번에도 망치면 진짜 학사경고야...");
+        //dialogues.add("어떡하지...하아");
+        //dialogues.add("??? : 임동현군 ?");
+        //dialogues.add("하아...");
+        //dialogues.add("??? : 임동현군 맞나요 ?");
+        //dialogues.add("헉! 교,교수님?");
+        //dialogues.add("(교수님들이 왜 여기에...?)");
+        //dialogues.add("교수진 : 다름이 아니고 임동현군의 성적이 처참해서...");
+        //dialogues.add("네...?");
+        //dialogues.add("교수진 : 그래서 내부회의를 통해 동현군에게 기회를 주기로 했어요");
+        //dialogues.add("네...????");
+        //dialogues.add("교수진 : 우리랑 카드게임을 해서 승리하면, 성적을 올려주기로 했네");
+        //dialogues.add("(나에게 이런 기회가...?)");
+        //dialogues.add("(꿀꺽,)교수님들...! 제가 완승한다면 A, A로 주세욧...! 혹시, A+도?");
+        //dialogues.add("교수진 : 그래 알겠네, ...뭐? A+ ?");
         dialogues.add("그럼 제가 교수님들 마음에 탕!탕! 카드게임..! 하러 갑시다!");
         dialogues.add("(하아..근데 무슨 수로 교수님들을 이기지...)");
 
