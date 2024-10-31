@@ -43,7 +43,7 @@
 					"attack": 5,
 					"health": 5,
 					"cost": 2,
-					"description": "우리 수뭉이. 잘 부탁드려요, 아 눈의\n이건 그저 땀인걸...",
+					"description": "우리 수뭉이. 잘 부탁드려요,\n아 눈의 이건 그저 땀인걸...",
 					"tag": "성장",
 					"image": "/resources/cards/minion_cardEX.png"
 				},
@@ -120,7 +120,7 @@
 					"attack": 8,
 					"health": 2,
 					"cost": 3,
-					"description": "교수님, 거기는 제 잔상.입니다만 ?",
+					"description": "교수님, 거기는 제\n잔상.입니다만 ?",
 					"tag": "날개",
 					"image": "/resources/cards/minion_cardEX.png"
 

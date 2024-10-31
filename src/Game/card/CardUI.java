@@ -73,7 +73,8 @@ public class CardUI extends JPanel implements Serializable {
                 healthLabel.setForeground(Color.BLACK);
                 healthLabel.setBounds(215, 330, 100, 50);
 
-                JLabel tagLabel = new JLabel(card.getTag());
+                String tagWithBreaks = "<html>" + card.getTag().replace("\n", "<br>") + "</html>";
+                JLabel tagLabel = new JLabel(tagWithBreaks);
                 tagLabel.setFont(customFont.deriveFont(25f));
                 tagLabel.setForeground(Color.BLACK);
                 tagLabel.setBounds(125, 310, 200, 50);

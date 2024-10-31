@@ -73,7 +73,7 @@
 					"attack": 1,
 					"health": 5,
 					"cost": 2,
-					"description": "총알받이로 쓰면 최고 ! 길태숙 교수님이 좋아합니다",
+					"description": "총알받이로 쓰면 최고 !\n길태숙 교수님이 좋아합니다",
 					"tag": "귀환",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
@@ -84,8 +84,8 @@
 					"attack": 2,
 					"health": 2,
 					"cost": 3,
-					"description": "일반공격이 전체공격에 2회공격인 신호연은 좋아하세요?",
-					"tag": "다중타격",
+					"description": "일반공격이\n전체공격에 2회공격인 신호연은\n좋아하세요?",
+					"tag": "다중\n타격",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
@@ -95,7 +95,7 @@
 					"attack": 0,
 					"health": 10,
 					"cost": 3,
-					"description": "라면받침대로 쓰고 있습니다. 두꺼워서 좋아요",
+					"description": "라면받침대로 쓰고 있습니다.\n두꺼워서 좋아요",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
@@ -105,7 +105,7 @@
 					"attack": 7,
 					"health": 4,
 					"cost": 4,
-					"description": "게임학개론 들어야겠지? 그림 그려야겠지? 타과도 예외는 없다.",
+					"description": "게임학개론 들어야겠지?\n그림 그려야겠지?\n타과도 예외는 없다.",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
@@ -126,7 +126,7 @@
 					"attack": 2,
 					"health": 2,
 					"cost": 1,
-					"description": "제가 카드 100장을 만들겠다고... 무슨수로",
+					"description": "제가 카드 100장을 만들겠다고...\n무슨수로",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
@@ -136,7 +136,7 @@
 					"attack": 3,
 					"health": 3,
 					"cost": 2,
-					"description": "겜학 9점이어도 기획, 가능합니다.",
+					"description": "겜학 9점이어도\n기획, 가능합니다.",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
@@ -166,7 +166,7 @@
 					"attack": 2,
 					"health": 1,
 					"cost": 0,
-					"description": "신호연씨 빨리 만들어오시라고요",
+					"description": "신호연씨 빨리\n만들어오시라고요",
 					"image": "/resources/cards/minion_cardEX.png"
 				}
 			],
