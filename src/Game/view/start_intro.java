@@ -30,7 +30,7 @@ public class start_intro extends JPanel {
         
 
         // 배경 이미지 로드
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/background/black.jpg")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/background/black.png")).getImage();
 
         // 레이아웃 설정
         setLayout(null);

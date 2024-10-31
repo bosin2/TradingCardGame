@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import Game.button_manager.Default_button;
 import Game.button_manager.Mainmenu_button;
 
 public class view_main extends JPanel {
@@ -21,6 +22,7 @@ public class view_main extends JPanel {
 
     public view_main(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        Default_button buttonManager = new Default_button();
 
         backgroundImage = new ImageIcon(getClass().getResource("/resources/background/mainmenu.png")).getImage();
 
@@ -28,34 +30,21 @@ public class view_main extends JPanel {
         setLayout(null);
         setPreferredSize(new Dimension(1300, 800));
 
-        button_1 = createImageButton("/resources/icon/start_Button.png");
-        button_1.setBounds(830, 250, 200, 100);
+        button_1 = buttonManager.createImageButton("시작하기");
+        button_1.setBounds(900, 150, 200, 100);
         add(button_1);
-
-        button_2 = createImageButton("/resources/icon/continue_Button.png");
-        button_2.setBounds(830, 450, 200, 100);
+        
+        button_2 = buttonManager.createImageButton("이어하기");
+        button_2.setBounds(900, 350, 200, 100);
         add(button_2);
 
-        button_3 = createImageButton("/resources/icon/manual_Button.png");
-        button_3.setBounds(830, 650, 200, 100);
+        button_3 = buttonManager.createImageButton("설명서");
+        button_3.setBounds(900, 550, 200, 100);
         add(button_3);
 
         // 컨트롤러 초기화
         Mainmenu_button controller = new Mainmenu_button(this, mainFrame);
         controller.initController();
-    }
-    
- // 이미지 버튼 생성 메서드
-    private JButton createImageButton(String imagePath) {
-        // 이미지 불러오기
-        ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
-        JButton button = new JButton(icon);
-
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-
-        return button;
     }
     
     @Override

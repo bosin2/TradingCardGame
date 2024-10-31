@@ -35,52 +35,54 @@ public class CardUI extends JPanel implements Serializable {
                 JDialog dialog = new JDialog();
                 dialog.setTitle(card.getName() + " - 카드 확대 보기");
                 dialog.setModal(true);
-                dialog.setSize(new Dimension(400, 600));
+                dialog.setSize(new Dimension(315, 432));
                 dialog.setLocationRelativeTo(null);
 
                 // 확대된 카드 이미지
-                Image scaledImage = cardImage.getScaledInstance(400, 600, Image.SCALE_SMOOTH);
+                Image scaledImage = cardImage.getScaledInstance(300, 400, Image.SCALE_SMOOTH);
                 JLabel cardImageLabel = new JLabel(new ImageIcon(scaledImage));
-                cardImageLabel.setBounds(0, 0, 400, 600); // 이미지의 위치와 크기 설정
+                cardImageLabel.setBounds(0, 0, 300, 400); // 이미지의 위치와 크기 설정
 
                 // JLayeredPane 사용하여 이미지와 라벨들을 층으로 쌓기
                 JLayeredPane layeredPane = new JLayeredPane();
-                layeredPane.setPreferredSize(new Dimension(400, 600));
+                layeredPane.setPreferredSize(new Dimension(300, 400));
 
                 // 카드 이미지 추가 (가장 뒤에)
-                cardImageLabel.setBounds(0, 0, 400, 600); 
+                cardImageLabel.setBounds(0, 0, 300, 400); 
                 layeredPane.add(cardImageLabel, Integer.valueOf(0)); // 이미지가 뒤쪽
 
                 // 카드 정보 라벨 설정 및 위치 지정
-                JLabel costLabel = new JLabel("" + card.getCost(), SwingConstants.LEFT);
+                JLabel costLabel = new JLabel("" + card.getCost());
                 costLabel.setFont(customFont.deriveFont(30f));
                 costLabel.setForeground(Color.BLACK);
-                costLabel.setBounds(10, 10, 100, 30); // 코스트는 왼쪽 상단에 위치
+                costLabel.setBounds(35, 30, 100, 50);
 
-                JLabel nameLabel = new JLabel("" + card.getName(), SwingConstants.RIGHT);
-                nameLabel.setFont(customFont.deriveFont(30f));
+                String nameWithBreaks = "<html>" + card.getName().replace("\n", "<br>") + "</html>";
+                nameLabel = new JLabel(nameWithBreaks);
+                nameLabel.setFont(customFont.deriveFont(24f));
                 nameLabel.setForeground(Color.BLACK);
-                nameLabel.setBounds(220, 10, 170, 30); // 이름은 오른쪽 상단에 위치
+                nameLabel.setBounds(50, 100, 280, 80);
 
-                JLabel attackLabel = new JLabel("" + card.getAttack(), SwingConstants.LEFT);
+                JLabel attackLabel = new JLabel("" + card.getAttack());
                 attackLabel.setFont(customFont.deriveFont(30f));
                 attackLabel.setForeground(Color.BLACK);
-                attackLabel.setBounds(10, 560, 100, 30); // 공격력은 왼쪽 하단에 위치
+                attackLabel.setBounds(35, 330, 100, 50);
 
-                JLabel healthLabel = new JLabel("" + card.getHealth(), SwingConstants.RIGHT);
+                JLabel healthLabel = new JLabel("" + card.getHealth());
                 healthLabel.setFont(customFont.deriveFont(30f));
                 healthLabel.setForeground(Color.BLACK);
-                healthLabel.setBounds(290, 560, 100, 30); // 체력은 오른쪽 하단에 위치
+                healthLabel.setBounds(215, 330, 100, 50);
 
-                JLabel tagLabel = new JLabel("" + card.getTag(), SwingConstants.CENTER);
+                JLabel tagLabel = new JLabel(card.getTag());
                 tagLabel.setFont(customFont.deriveFont(25f));
                 tagLabel.setForeground(Color.BLACK);
-                tagLabel.setBounds(100, 500, 200, 30); // 태그는 중앙 아랫쪽에 위치
+                tagLabel.setBounds(125, 310, 200, 50);
 
-                JLabel descriptionLabel = new JLabel("" + card.getDescription() + "", SwingConstants.CENTER);
+                String WithBreaks = "<html>" + card.getDescription().replace("\n", "<br>") + "</html>";
+                JLabel descriptionLabel = new JLabel(WithBreaks);
                 descriptionLabel.setFont(customFont.deriveFont(16f));
                 descriptionLabel.setForeground(Color.BLACK);
-                descriptionLabel.setBounds(20, 350, 360, 140); // 설명은 태그보다 위에 위치하며 문장이 전부 나오도록 설정
+                descriptionLabel.setBounds(30, 170, 280, 140);
 
                 // 정보 라벨들을 layeredPane에 추가 (이미지 위에 위치)
                 layeredPane.add(costLabel, Integer.valueOf(1));
@@ -184,17 +186,18 @@ public class CardUI extends JPanel implements Serializable {
     }
 
     private void setupLabels() {
-        // 카드 이름 라벨
-        nameLabel = new JLabel(card.getName(), SwingConstants.CENTER);
+    	// 카드 이름 라벨: n <br>로 바꾸고 HTML 태그로 감싸기
+        String nameWithBreaks = "<html>" + card.getName().replace("\n", "<br>") + "</html>";
+        nameLabel = new JLabel(nameWithBreaks, SwingConstants.CENTER);
         nameLabel.setForeground(Color.BLACK);
-        nameLabel.setFont(customFont.deriveFont(14f));
-        nameLabel.setBounds(0, 10, CARD_WIDTH, 20);
+        nameLabel.setFont(customFont.deriveFont(13f));
+        nameLabel.setBounds(10, 25, CARD_WIDTH- 20, 80);
 
         // 카드 태그 라벨
         tagLabel = new JLabel(card.getTag(), SwingConstants.CENTER);
         tagLabel.setForeground(Color.BLACK);
-        tagLabel.setFont(customFont.deriveFont(14f));
-        tagLabel.setBounds(0, CARD_HEIGHT / 2 + 40, CARD_WIDTH, 20);
+        tagLabel.setFont(customFont.deriveFont(25f));
+        tagLabel.setBounds(0, 115, CARD_WIDTH, 30);
 
         // 카드 공격력 라벨
         attackLabel = new JLabel(String.valueOf(card.getAttack()));
@@ -206,22 +209,23 @@ public class CardUI extends JPanel implements Serializable {
         healthLabel = new JLabel(String.valueOf(card.getHealth()));
         healthLabel.setForeground(Color.BLACK);
         healthLabel.setFont(customFont.deriveFont(16f));
-        healthLabel.setBounds(CARD_WIDTH - 50, CARD_HEIGHT - 40, 50, 30);
+        healthLabel.setBounds(105, CARD_HEIGHT - 40, 50, 30);
         
+        //코스트
         costLabel = new JLabel(String.valueOf(card.getCost()));
         costLabel.setForeground(Color.BLACK);
-        costLabel.setFont(customFont.deriveFont(16f));
-        costLabel.setBounds(10, 10, 50, 30);
+        costLabel.setFont(customFont.deriveFont(18f));
+        costLabel.setBounds(15, 10, 50, 30);
         
         
     }
     
     public void resetFont() {
-        nameLabel.setFont(customFont.deriveFont(14f));
-        tagLabel.setFont(customFont.deriveFont(14f));
+        nameLabel.setFont(customFont.deriveFont(13f));
+        tagLabel.setFont(customFont.deriveFont(25f));
         attackLabel.setFont(customFont.deriveFont(16f));
         healthLabel.setFont(customFont.deriveFont(16f));
-        costLabel.setFont(customFont.deriveFont(16f));
+        costLabel.setFont(customFont.deriveFont(18f));
 
     }
 

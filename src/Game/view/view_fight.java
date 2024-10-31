@@ -61,7 +61,7 @@ public class view_fight extends JPanel implements basicfight.GameEventListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g.drawImage(backgroundImage, 0, 0, 1300, 800, this);
         } else {
             System.out.println("배경 이미지가 없습니다!");
         }
@@ -73,12 +73,12 @@ public class view_fight extends JPanel implements basicfight.GameEventListener {
         // 적 배틀필드 패널 설정
         enemyBattlefieldPanel = new JPanel(new GridLayout(1, 5));
         enemyBattlefieldPanel.setOpaque(false);
-        enemyBattlefieldPanel.setBounds(50, 50, 770, 230);
+        enemyBattlefieldPanel.setBounds(48, 75, 750, 200);
         add(enemyBattlefieldPanel);
         for (int i = 0; i < 5; i++) {
             JPanel slotPanel = new JPanel(null);
             slotPanel.setOpaque(false);
-            slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+            slotPanel.setBorder(null); // 테두리 제거
             enemyBattlefieldPanel.add(slotPanel);
             enemyFieldSlots[i] = slotPanel;
         }
@@ -86,12 +86,12 @@ public class view_fight extends JPanel implements basicfight.GameEventListener {
         // 플레이어 배틀필드 패널 설정
         playerBattlefieldPanel = new JPanel(new GridLayout(1, 5));
         playerBattlefieldPanel.setOpaque(false);
-        playerBattlefieldPanel.setBounds(50, 300, 770, 230);
+        playerBattlefieldPanel.setBounds(48, 275, 750, 200);
         add(playerBattlefieldPanel);
         for (int i = 0; i < 5; i++) {
             JPanel slotPanel = new JPanel(null);
             slotPanel.setOpaque(false);
-            slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+            slotPanel.setBorder(null); // 테두리 제거
             playerBattlefieldPanel.add(slotPanel);
             playerFieldSlots[i] = slotPanel;
 
